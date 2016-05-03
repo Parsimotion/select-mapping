@@ -4,18 +4,23 @@ using System.Linq;
 using System.Reflection;
 using SelectMapping.Helpers;
 
-namespace SelectMapping
+namespace SelectMapping.Models
 {
-	public class SelectMapping
+	public class SelectProperty
 	{
 		public string Property { get; set; }
-		public IEnumerable<SelectMapping> SubProperties { get; set; }
+		public IEnumerable<SelectProperty> SubProperties { get; set; }
 
-		public SelectMapping()
+		public SelectProperty()
 		{
-			SubProperties = new List<SelectMapping>();
+			SubProperties = new List<SelectProperty>();
 		}
 
+		public Type ElementType<T>()
+		{
+			return ElementType(typeof (T));
+		}
+		
 		public Type ElementType(Type type)
 		{
 			var propertyType = type
@@ -23,6 +28,11 @@ namespace SelectMapping
 				.PropertyType;
 
 			return propertyType.GetElementType() ?? propertyType; // For arrays
+		}
+
+		public IEnumerable<string> IgnoredProperties<T>()
+		{
+			return IgnoredProperties(typeof (T));
 		}
 
 		public IEnumerable<string> IgnoredProperties(Type elementType)

@@ -42,6 +42,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -69,7 +70,8 @@
   <ItemGroup>
     <Compile Include="Assertions\CustomAssertions.cs" />
     <Compile Include="Assertions\OptionAssertion.cs" />
-    <Compile Include="SelectMapperTest.cs" />
+    <Compile Include="Models\SelectMapperTest.cs" />
+    <Compile Include="Models\SelectPropertyTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

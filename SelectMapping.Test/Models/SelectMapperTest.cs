@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using SelectMapping.Helpers;
+using SelectMapping.Models;
 using SelectMapping.Test.Assertions;
 using Xunit;
 
-namespace SelectMapping.Test
+namespace SelectMapping.Test.Models
 {
     public class SelectMapperTest
 	{
@@ -24,25 +25,25 @@ namespace SelectMapping.Test
 				.Should()
 				.HasValue(new[]
 				{
-					new SelectMapping
+					new SelectProperty
 					{
-						Property = ID,
+						Property = ID
 					},
-					new SelectMapping
+					new SelectProperty
 					{
 						Property = LOCATION,
 						SubProperties =
 							new[]
 							{
-								new SelectMapping { Property = LOCATION_PROPERTIES.FromCommaSeparatedValues().ElementAt(0) },
-								new SelectMapping { Property = LOCATION_PROPERTIES.FromCommaSeparatedValues().ElementAt(1), SubProperties = new[] { new SelectMapping { Property = CITY_PROPERTIES } } }
+								new SelectProperty { Property = LOCATION_PROPERTIES.FromCommaSeparatedValues().ElementAt(0) },
+								new SelectProperty { Property = LOCATION_PROPERTIES.FromCommaSeparatedValues().ElementAt(1), SubProperties = new[] { new SelectProperty { Property = CITY_PROPERTIES } } }
 							}
 					},
-					new SelectMapping
+					new SelectProperty
 					{
 						Property = PHONE,
-						SubProperties = PHONE_PROPERTIES.FromCommaSeparatedValues().Select(it => new SelectMapping { Property = it })
-					},
+						SubProperties = PHONE_PROPERTIES.FromCommaSeparatedValues().Select(it => new SelectProperty { Property = it })
+					}
 				});
 		}
 	}

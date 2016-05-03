@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using SelectMapping.Helpers;
 
-namespace SelectMapping
+namespace SelectMapping.Models
 {
     public static class SelectMapper
     {
 		private const string SELECT = "$select";
 		private const string SUB_PROPS_REGEX = @"\(([A-z]|[0-9]|,|\(.*\))*\)";
 
-		public static Option<IEnumerable<SelectMapping>> GetSelect(this string queryString)
+		public static Option<IEnumerable<SelectProperty>> GetSelect(this string queryString)
 		{
 			return GetOdataSelect(queryString)
 				.Select(it => it.AsSelectMappings());
 		}
 
-		private static IEnumerable<SelectMapping> AsSelectMappings(this string queryString)
+		private static IEnumerable<SelectProperty> AsSelectMappings(this string queryString)
 		{
 			return new Regex(SUB_PROPS_REGEX)
 				.Replace(queryString, "")
@@ -25,7 +25,7 @@ namespace SelectMapping
 				.Select(it => ToSelectMapping(it, queryString));
 		}
 
-		private static SelectMapping ToSelectMapping(string propertyName, string queryString)
+		private static SelectProperty ToSelectMapping(string propertyName, string queryString)
 		{
 			var completeProp = new Regex(propertyName + SUB_PROPS_REGEX).Match(queryString).Value;
 			var subs = completeProp
@@ -33,7 +33,7 @@ namespace SelectMapping
 				.Trim(1)
 				.AsSelectMappings();
 
-			return new SelectMapping { Property = propertyName, SubProperties = subs };
+			return new SelectProperty { Property = propertyName, SubProperties = subs };
 		}
 
 		private static Option<string> GetOdataSelect(string queryString)
