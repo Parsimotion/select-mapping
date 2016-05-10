@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using FluentAssertions;
 using SelectMapping.Helpers;
 using SelectMapping.Models;
 using SelectMapping.Test.Assertions;
@@ -15,11 +16,30 @@ namespace SelectMapping.Test.Models
 		const string PHONE = "phone";
 		const string PHONE_PROPERTIES = "cel";
 		const string FILTER = "$filter=PhoneNumber eq 44444444";
-		const string PAGINATED = "$skip=1&$top=2&$orderby=name&" + FILTER;
-		readonly string QUERYSTRING = $"?$inlinecount=allpages&{PAGINATED}&$select={ID},{LOCATION}({LOCATION_PROPERTIES}({CITY_PROPERTIES})),{PHONE}({PHONE_PROPERTIES})&contact=1";
+		const string PAGINATED = "$skip=1&$top=2&$orderby=name&";
+		const string SELECT = ID + "," + LOCATION + "(" + LOCATION_PROPERTIES + "(" + CITY_PROPERTIES + "))," + PHONE + "(" + PHONE_PROPERTIES + ")";
+		readonly string QUERYSTRING = $"?$inlinecount=allpages&{PAGINATED + FILTER}&$select={SELECT}&contact=1";
+
+	    [Fact]
+	    public void Should_parse_query_string()
+	    {
+		    QUERYSTRING.ParseSelect().Should().Be(SELECT);
+		}
+
+	    [Fact]
+	    public void Should_not_parse_empty_select_query_string()
+	    {
+			"?$select=".ParseSelect().Should().BeNull();
+		}
 
 		[Fact]
-		public void Can_return_select_elements()
+		public void Should_not_parse_non_select_query_string()
+		{
+			FILTER.ParseSelect().Should().BeNull();
+		}
+
+		[Fact]
+		public void Should_return_select_elements()
 		{
 			QUERYSTRING.GetSelect()
 				.Should()

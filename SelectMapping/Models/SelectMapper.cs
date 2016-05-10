@@ -13,8 +13,17 @@ namespace SelectMapping.Models
 
 		public static Option<IEnumerable<SelectProperty>> GetSelect(this string queryString)
 		{
-			return GetOdataSelect(queryString)
+			return queryString
+				.ParseSelect()
+				.ToOption()
 				.Select(it => it.AsSelectMappings());
+		}
+
+		public static string ParseSelect(this string queryString)
+		{
+			string selectValue;
+			OdataQueries(queryString).TryGetValue(SELECT, out selectValue);
+			return selectValue;
 		}
 
 		private static IEnumerable<SelectProperty> AsSelectMappings(this string queryString)
@@ -36,19 +45,12 @@ namespace SelectMapping.Models
 			return new SelectProperty { Property = propertyName, SubProperties = subs };
 		}
 
-		private static Option<string> GetOdataSelect(string queryString)
-		{
-			string selectValue;
-			OdataQueries(queryString).TryGetValue(SELECT, out selectValue);
-			return selectValue.ToOption();
-		}
-
 		private static Dictionary<string, string> OdataQueries(string queryString)
 		{
 			var nameValueCollection = HttpUtility.ParseQueryString(queryString);
 			return nameValueCollection
 				.AllKeys
-				.Where(o => o != null && o.StartsWith("$"))
+				.Where(o => o != null && o.StartsWith("$") && nameValueCollection[o] != string.Empty)
 				.ToDictionary(t => t, t => nameValueCollection[t]);
 		}
 	}
