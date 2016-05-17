@@ -11,12 +11,13 @@ namespace SelectMapping.Models
 		private const string SELECT = "$select";
 		private const string SUB_PROPS_REGEX = @"\(([A-z]|[0-9]|,|\(.*\))*\)";
 
-		public static Option<IEnumerable<SelectProperty>> GetSelect(this string queryString)
+		public static IEnumerable<SelectProperty> SelectedProperties(this string queryString)
 		{
 			return queryString
 				.SelectString()
 				.ToOption()
-				.Select(it => it.AsSelectMappings());
+				.Select(it => it.AsSelectMappings())
+				.GetOrElse(new List<SelectProperty>());
 		}
 
 		public static string SelectString(this string queryString)

@@ -2,7 +2,6 @@
 using FluentAssertions;
 using SelectMapping.Helpers;
 using SelectMapping.Models;
-using SelectMapping.Test.Assertions;
 using Xunit;
 
 namespace SelectMapping.Test.Models
@@ -41,9 +40,8 @@ namespace SelectMapping.Test.Models
 		[Fact]
 		public void Should_return_select_elements()
 		{
-			QUERYSTRING.GetSelect()
-				.Should()
-				.HasValue(new[]
+			QUERYSTRING.SelectedProperties()
+				.ShouldBeEquivalentTo(new[]
 				{
 					new SelectProperty
 					{
