@@ -23,19 +23,19 @@ namespace SelectMapping.Test.Models
 	    [Fact]
 	    public void Should_parse_query_string()
 	    {
-		    QUERYSTRING.ParseSelect().Should().Be(SELECT);
+		    QUERYSTRING.SelectString().Should().Be(SELECT);
 		}
 
 	    [Fact]
 	    public void Should_not_parse_empty_select_query_string()
 	    {
-			"?$select=".ParseSelect().Should().BeNull();
+			"?$select=".SelectString().Should().BeNull();
 		}
 
 		[Fact]
 		public void Should_not_parse_non_select_query_string()
 		{
-			FILTER.ParseSelect().Should().BeNull();
+			FILTER.SelectString().Should().BeNull();
 		}
 
 		[Fact]

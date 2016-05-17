@@ -14,12 +14,12 @@ namespace SelectMapping.Models
 		public static Option<IEnumerable<SelectProperty>> GetSelect(this string queryString)
 		{
 			return queryString
-				.ParseSelect()
+				.SelectString()
 				.ToOption()
 				.Select(it => it.AsSelectMappings());
 		}
 
-		public static string ParseSelect(this string queryString)
+		public static string SelectString(this string queryString)
 		{
 			string selectValue;
 			OdataQueries(queryString).TryGetValue(SELECT, out selectValue);
