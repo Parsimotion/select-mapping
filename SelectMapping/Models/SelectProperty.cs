@@ -43,14 +43,24 @@ namespace SelectMapping.Models
 				.Select(it => it.Name);
 		}
 
-		private bool ShouldIgnore(PropertyInfo property)
+		public bool IsSelected(string property)
 		{
-			return SubProperties.HasValue() && !SubProperties.Select(it => it.Property).Contains(property.Name, StringComparison.InvariantCultureIgnoreCase);
+			return IsProperty(property) || SubProperties.Any(it => it.IsSelected(property));
 		}
 
 		private bool IsProperty(PropertyInfo property)
 		{
-			return Property.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase);
+			return IsProperty(property.Name);
+		}
+
+		private bool IsProperty(string property)
+		{
+			return Property.Equals(property, StringComparison.InvariantCultureIgnoreCase);
+		}
+
+		private bool ShouldIgnore(PropertyInfo property)
+		{
+			return SubProperties.HasValue() && !SubProperties.Select(it => it.Property).Contains(property.Name, StringComparison.InvariantCultureIgnoreCase);
 		}
 	}
 }

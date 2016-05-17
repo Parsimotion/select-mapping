@@ -6,6 +6,10 @@ namespace SelectMapping.Test.Models
 {
 	public class SelectPropertyTest
 	{
+		private const string LOCATION = "Location";
+		private const string ADDRESS = "Address";
+		private const string CITY = "City";
+
 		[Fact]
 		public void Should_return_matching_name_property_type()
 		{
@@ -21,7 +25,7 @@ namespace SelectMapping.Test.Models
 		[Fact]
 		public void Should_return_not_mapped_property_names()
 		{
-			SelectLocation.IgnoredProperties<Location>().ShouldBeEquivalentTo(new[] {"Address"});
+			SelectLocation.IgnoredProperties<Location>().ShouldBeEquivalentTo(new[] {ADDRESS});
 		}
 
 		[Fact]
@@ -36,12 +40,30 @@ namespace SelectMapping.Test.Models
 			PoorSelectProperty.ElementType<Person>().ShouldBeEquivalentTo(typeof (Location));
 		}
 
+		[Fact]
+		public void Should_be_selected_its_property()
+		{
+			SelectLocation.IsSelected(LOCATION).Should().BeTrue();
+		}
+
+		[Fact]
+		public void Should_be_selected_any_subproperty()
+		{
+			SelectLocation.IsSelected(CITY).Should().BeTrue();
+		}
+
+		[Fact]
+		public void Should_not_be_selected_unknown_property()
+		{
+			SelectLocation.IsSelected(ADDRESS).Should().BeFalse();
+		}
+
 
 		private static SelectProperty SelectLocation
 		{
 			get
 			{
-				return new SelectProperty {Property = "Location", SubProperties = new[] {new SelectProperty {Property = "City"}}};
+				return new SelectProperty {Property = LOCATION, SubProperties = new[] {new SelectProperty {Property = CITY}}};
 			}
 		}
 
