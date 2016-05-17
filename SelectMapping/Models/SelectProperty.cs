@@ -60,7 +60,7 @@ namespace SelectMapping.Models
 
 		private bool ShouldIgnore(PropertyInfo property)
 		{
-			return SubProperties.HasValue() && !SubProperties.Select(it => it.Property).Contains(property.Name, StringComparison.InvariantCultureIgnoreCase);
+			return SubProperties.HasValue() && !SubProperties.Any(it => it.IsProperty(property));
 		}
 	}
 }
